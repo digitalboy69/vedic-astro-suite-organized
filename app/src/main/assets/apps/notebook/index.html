@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Jyotish Notebook</title>
+
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="side" id="side">
+    <div class="brand"><div class="lg">📝</div><div><b>Jyotish Notebook</b><small>your private desk</small></div></div>
+    <button class="newbtn" id="bNew" type="button">＋ New note</button>
+    <nav class="navs" id="nav"></nav>
+    <div class="sfoot">
+      <button class="ib" id="bCmd" title="Command palette (Ctrl+K)">⌘</button>
+      <button class="ib" id="bTpl" title="Templates">🗂️</button>
+      <button class="ib" id="bSet" title="Settings, backup &amp; lock">⚙️</button>
+      <button class="ib" id="bLock" title="Lock notebook">🔒</button>
+    </div>
+  </aside>
+  <section class="lst" id="lst">
+    <div class="lh">
+      <h2 id="lTitle">All notes</h2>
+      <div class="srch"><i>🔎</i><input id="q" placeholder="Search notes, clients, tags…" autocomplete="off"><kbd>/</kbd></div>
+      <div class="lc" id="lChips"></div>
+    </div>
+    <div class="items" id="items"></div>
+  </section>
+  <main class="main" id="main">
+    <div class="top"><button class="ib" id="bMenu" aria-label="Menu">☰</button><button class="ib" id="bBack" aria-label="Back to list">←</button><b style="flex:1;font-family:var(--serif)">Jyotish Notebook</b><button class="ib" id="bNew2" aria-label="New note">＋</button></div>
+    <div id="mainBody" style="display:flex;flex-direction:column;flex:1;min-height:0"></div>
+  </main>
+</div>
+
+<div class="pal" id="pal"></div>
+<div class="ov" id="ov"><div class="md" id="md"></div></div>
+<div class="ov" id="ovc"><div class="cmd" id="cmd"><input id="cin" placeholder="Type a command or search a note…" autocomplete="off"><div class="res" id="cres"></div></div></div>
+<div class="toast" id="toast"></div>
+<div class="lock" id="lock"><div class="bx"><div class="em">🔒</div><h2>Notebook locked</h2><p>Enter your PIN</p><input id="lpin" type="password" inputmode="numeric" maxlength="8" autocomplete="off"><p id="lerr" style="color:var(--bad);margin-top:10px"></p></div></div>
+
+<script src="assets/js/01-notebook-app.js"></script>
+</body>
+</html>

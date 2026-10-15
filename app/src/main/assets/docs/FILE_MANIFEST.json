@@ -1,0 +1,177 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 2319,
+    "sha256": "c57c18b305538f06b643399f5478aa0ef5ddcf3236ccda6e98b11c76c5e1812d"
+  },
+  {
+    "path": "apps/birth-chart/assets/css/app.css",
+    "bytes": 268084,
+    "sha256": "b8f1b0e9562608e18ff3a17bfc601bccc78210d82994def2ae59f558b776a92a"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/01-contact-helper.js",
+    "bytes": 527,
+    "sha256": "5fc8c9a5988ef67280050857e9da507106ac3782351d1b8419a8693acd01ee97"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/02-app-core.js",
+    "bytes": 542743,
+    "sha256": "45a407cd79f9f4738758b82a03a57725c02b0a4914d36a6bfef7d0198d072845"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/03-varga-interface.js",
+    "bytes": 21182,
+    "sha256": "829e6c2192e5d4fda3666bfdbef0285e9201a1e641b9a4173707521efd4a0938"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/04-chart-reading.js",
+    "bytes": 16798,
+    "sha256": "c7388953da4caf249baa16188191299d37519077fbb90b68cad17098416a0c17"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/05-life-activation.js",
+    "bytes": 9818,
+    "sha256": "d626fa24abf71e30dd36e6e042d5e2f00d702dd47c6e23aff8023bf09a9c9cb1"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/06-bhava-bala.js",
+    "bytes": 7950,
+    "sha256": "67e11a7c4cbc46f6bbf7b8992c4a11a51ec609ad476024df8e599d2171ff9deb"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/07-tithi-pravesh.js",
+    "bytes": 15340,
+    "sha256": "a849260f0f68e27cfc8e3a09a2702e0a9b9b8ca1e01c865f2ed3a40a10ba733a"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/08-sahams.js",
+    "bytes": 15597,
+    "sha256": "b85bcee1cdaaf6918827dc733ff05e03db0a72de30dad0afd74b33962c51a2cf"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/09-fate-meter.js",
+    "bytes": 21460,
+    "sha256": "cbfa20ccc47efe8aea2314a098f2434ee9b1fa63df0e4635c90e69cc5cd2a01e"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/10-export-copy.js",
+    "bytes": 49195,
+    "sha256": "bb596b1f26d81521c157db2f3cbb5b31a9dcc321a81673326374319798235a87"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/11-qrcode-library.js",
+    "bytes": 313421,
+    "sha256": "e8f59b7d7d324847328d31b2aa737eb2113c219ae5f1be416016c3a429cfdc51"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/12-chart-sharing.js",
+    "bytes": 10404,
+    "sha256": "048f4e083a075c99d1d65dbf6d2181811d7d5368e92461ff7c9010713debb622"
+  },
+  {
+    "path": "apps/birth-chart/assets/js/13-cloud-account.js",
+    "bytes": 14925,
+    "sha256": "4aa99ff7e6451b62425d0ddb644a89cf6e27b81e9e7e844c7fbc8254346ad483"
+  },
+  {
+    "path": "apps/birth-chart/index.html",
+    "bytes": 23937,
+    "sha256": "17190dce262e2b57ce8a979e3796ecacd51e528e2e964839bc183ae860897771"
+  },
+  {
+    "path": "apps/developer/assets/css/app.css",
+    "bytes": 11369,
+    "sha256": "30bc86fdd0c62fc6d96d7636846f9ae1f3d07a1403cce60c573cb0ea5045637d"
+  },
+  {
+    "path": "apps/developer/assets/js/01-developer-contact.js",
+    "bytes": 810,
+    "sha256": "eb2a2a21023e9c594b7bc2af15321d8ff73d774c89b559d2e67713ba89507430"
+  },
+  {
+    "path": "apps/developer/index.html",
+    "bytes": 3235,
+    "sha256": "297cf4f8cacebdfd8a641a5a3247f373632f1078b890b7109e9438db3d26af94"
+  },
+  {
+    "path": "apps/notebook/assets/css/app.css",
+    "bytes": 26068,
+    "sha256": "c05c10bf790ec920c8fb69e9eb9c0b2f04fdc728b4abccfb9e734a546a42baa4"
+  },
+  {
+    "path": "apps/notebook/assets/js/01-notebook-app.js",
+    "bytes": 67088,
+    "sha256": "f6c66b4906bd9f8a934575793b36d6a98a7db71a54a55842e8426b37a92fc9a1"
+  },
+  {
+    "path": "apps/notebook/index.html",
+    "bytes": 2325,
+    "sha256": "c4c84cf235e3e6126765432917996613d1d26929ab3d630244ba80a972091d4c"
+  },
+  {
+    "path": "apps/sky/assets/css/app.css",
+    "bytes": 82312,
+    "sha256": "29b2d87605d587e968e6f95ffe310d5164a5cf09fc36f781cd1710491a47cdd9"
+  },
+  {
+    "path": "apps/sky/assets/js/01-astronomical-engine.js",
+    "bytes": 219662,
+    "sha256": "9d71a46edd2411c71b3627303248e78f49e29f4024ec7b35e53faa885f94d954"
+  },
+  {
+    "path": "apps/sky/assets/js/02-degree-finder-returns.js",
+    "bytes": 13679,
+    "sha256": "538e8140b8b27d41a9bf17d386c6e93f4dc6228b3e04383159987cad352a6d46"
+  },
+  {
+    "path": "apps/sky/assets/js/03-retrograde-planner.js",
+    "bytes": 7637,
+    "sha256": "b96e75fbd1cd75cb513116dcb5ffde8c3877d67c9c46833c9abbc50db35cecf3"
+  },
+  {
+    "path": "apps/sky/assets/js/04-export-copy.js",
+    "bytes": 49149,
+    "sha256": "64a89ba8c6ce7ec40f77977a7661549be633ae6d094f0f51eac421e5f1d4f772"
+  },
+  {
+    "path": "apps/sky/index.html",
+    "bytes": 23513,
+    "sha256": "3e4b2efadbb534d945b663372fc9f02cc3481e42f0873e1c893f3ca03e5b41f6"
+  },
+  {
+    "path": "assets/css/shell.css",
+    "bytes": 8152,
+    "sha256": "8bda2fec6be33ab6b17499f2b593fa557e110537b976d9d6109e3a4b375f25e4"
+  },
+  {
+    "path": "assets/js/01-hash-init.js",
+    "bytes": 47,
+    "sha256": "25ae837f2573d0f07a492b140df2de41e75de3a4bbad3f88abe70dd7f1ac628c"
+  },
+  {
+    "path": "assets/js/02-location-picker.js",
+    "bytes": 35251,
+    "sha256": "043c81bc3fd0e3a4feabbb37ecbaab111d44425ceb44973f2844bb671fc13954"
+  },
+  {
+    "path": "assets/js/03-launcher.js",
+    "bytes": 7138,
+    "sha256": "b8f68e8978bbc2f4a5ffa81ddecbc2c8cade7d81956104e3ca0eff25b672454b"
+  },
+  {
+    "path": "docs/ARCHITECTURE.md",
+    "bytes": 1933,
+    "sha256": "b66453a4bbfe2d33de7a1b0ffa9233f7d468eb9d121afaa53b70109e7e4d69b3"
+  },
+  {
+    "path": "docs/SECURITY.md",
+    "bytes": 1613,
+    "sha256": "d468ca4ff4561fc3de6d1db482988368b23657edb54a2da9319c3320574be275"
+  },
+  {
+    "path": "index.html",
+    "bytes": 3303,
+    "sha256": "9801e790171dbcb0aba3b6d7ce4b537764ecbcaddf79d12866c9f1077f646c48"
+  }
+]

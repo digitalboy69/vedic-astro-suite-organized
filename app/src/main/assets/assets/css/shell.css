@@ -1,0 +1,70 @@
+/* ===== Original launcher style block 01 ===== */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#03060d;color:#e8edf7;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+.shell{position:fixed;inset:0}
+.stage{position:absolute;inset:0}
+.stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#03060d;display:none}
+.stage iframe.on{display:block;animation:fade .35s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.load{position:absolute;inset:0;z-index:3;display:grid;place-items:center;align-content:center;gap:26px;background:radial-gradient(70% 55% at 50% 42%,rgba(123,110,246,.20),transparent 70%),radial-gradient(40% 30% at 20% 80%,rgba(0,240,213,.07),transparent 70%),#03060d;transition:opacity .55s ease,visibility 0s .55s;overflow:hidden}
+.load.hide{opacity:0;visibility:hidden;pointer-events:none}
+.load::before{content:"";position:absolute;inset:-50%;background-image:radial-gradient(1.2px 1.2px at 12% 18%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 78% 12%,#fff6 50%,transparent 51%),radial-gradient(1.4px 1.4px at 34% 72%,#fff9 50%,transparent 51%),radial-gradient(1px 1px at 88% 66%,#fff7 50%,transparent 51%),radial-gradient(1.2px 1.2px at 56% 40%,#fff5 50%,transparent 51%),radial-gradient(1px 1px at 22% 46%,#fff6 50%,transparent 51%),radial-gradient(1.3px 1.3px at 66% 88%,#fff8 50%,transparent 51%);background-size:340px 340px;animation:drift 90s linear infinite;opacity:.8}
+@keyframes drift{to{transform:rotate(360deg)}}
+.orb{position:relative;width:132px;height:132px;display:grid;place-items:center}
+.orb i{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.10)}
+.orb .o1{width:62px;height:62px}.orb .o2{width:96px;height:96px}.orb .o3{width:132px;height:132px}
+.orb b{position:absolute;width:100%;height:100%;animation:spin linear infinite}
+.orb b::after{content:"";position:absolute;left:50%;top:0;border-radius:50%;transform:translate(-50%,-50%)}
+.orb .p1{animation-duration:2.4s;inset:35px;width:62px;height:62px}.orb .p1::after{width:7px;height:7px;background:#00F0D5;box-shadow:0 0 12px #00F0D5}
+.orb .p2{animation-duration:4s;inset:18px;width:96px;height:96px;animation-direction:reverse}.orb .p2::after{width:9px;height:9px;background:#7B6EF6;box-shadow:0 0 14px #7B6EF6}
+.orb .p3{animation-duration:6.5s;inset:0}.orb .p3::after{width:6px;height:6px;background:#D4AF37;box-shadow:0 0 12px #D4AF37}
+.orb em{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#ffd98a 45%,#e89b2c);box-shadow:0 0 26px 6px rgba(255,190,80,.45);animation:beat 2.4s ease-in-out infinite}
+@keyframes beat{50%{transform:scale(1.14);box-shadow:0 0 34px 10px rgba(255,190,80,.55)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load h1{position:relative;font:600 15px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.42em;text-indent:.42em;color:#e8edf7;text-align:center}
+.load span{position:relative;display:block;margin-top:-12px;font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.24em;text-align:center;background:linear-gradient(90deg,#6b7a99,#fff,#6b7a99);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shim 2s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.load .bar{position:relative;width:120px;height:2px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden}
+.load .bar::after{content:"";position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,#00F0D5,#7B6EF6,transparent);animation:slide 1.3s ease-in-out infinite}
+@keyframes slide{from{transform:translateX(-100%)}to{transform:translateX(300%)}}
+/* welcome screen */
+.load{gap:22px}
+.zring{position:absolute;inset:-46px;border-radius:50%;animation:spin 90s linear infinite;pointer-events:none}
+.zring s{position:absolute;left:50%;top:50%;width:20px;height:20px;margin:-10px;text-decoration:none;text-align:center;font:14px/20px system-ui,"Segoe UI Symbol",sans-serif;color:#D4AF37;opacity:0;animation:zin .6s ease forwards}
+@keyframes zin{to{opacity:.8}}
+.wel{position:relative;text-align:center;margin-top:38px;animation:welUp .9s .15s cubic-bezier(.2,.8,.3,1) both}
+.wel-hi{font:600 clamp(28px,7vw,44px)/1.1 Georgia,"Times New Roman",serif;background:linear-gradient(90deg,#F9D976,#fff 50%,#9fe9df);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 40px rgba(212,175,55,.25)}
+.pray{font-size:30px;margin-bottom:6px;display:block;animation:wave 2.4s ease-in-out infinite}
+@keyframes wave{50%{transform:translateY(-3px) rotate(-6deg)}}
+.wel-sub{margin-top:10px;font:300 clamp(13px,3.4vw,16px)/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.06em;color:#b9c3d9;min-height:1.4em;transition:opacity .4s}
+@keyframes welUp{from{opacity:0;transform:translateY(14px)}}
+.load.hide .wel{transform:translateY(-8px);transition:transform .6s}
+.load.compact .wel{display:none}
+@media (prefers-reduced-motion:reduce){.zring,.wel,.zring s{animation:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.load::before,.orb b,.orb em,.load .bar::after,.load span{animation:none}}
+/* developer card overlay (its own document, does not touch the current view) */
+#devFrame{position:fixed;inset:0;width:100%;height:100%;border:0;background:transparent;z-index:40;display:none;color-scheme:normal}
+#devFrame.on{display:block}
+/* floating switcher */
+.sw{position:fixed;z-index:50;left:0;top:0;width:40px;height:40px;touch-action:none;user-select:none;-webkit-user-select:none}
+.sw-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(11,17,32,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#e8edf7;font-size:18px;line-height:1;cursor:pointer;opacity:.78;box-shadow:0 4px 14px rgba(0,0,0,.45);transition:opacity .2s,border-color .2s,box-shadow .2s,transform .2s}
+.sw-btn:hover,.sw.open .sw-btn,.sw.drag .sw-btn{opacity:1}
+.sw.open .sw-btn{border-color:rgba(0,240,213,.65);box-shadow:0 0 0 3px rgba(0,240,213,.14),0 4px 14px rgba(0,0,0,.45)}
+.sw.drag .sw-btn{transform:scale(1.1);cursor:grabbing}
+.sw-menu{position:absolute;min-width:178px;padding:5px;border-radius:16px;background:linear-gradient(180deg,#121a2e,#0b1120);border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 40px rgba(0,0,0,.55);transform:scale(.55);opacity:0;visibility:hidden;pointer-events:none;transition:transform .22s cubic-bezier(.2,.9,.3,1.2),opacity .16s,visibility 0s .22s}
+.sw[data-x="r"] .sw-menu{right:0;transform-origin:right}.sw[data-x="l"] .sw-menu{left:0;transform-origin:left}
+.sw[data-y="t"] .sw-menu{top:calc(100% + 8px)}.sw[data-y="b"] .sw-menu{bottom:calc(100% + 8px)}
+.sw[data-y="t"][data-x="r"] .sw-menu{transform-origin:top right}.sw[data-y="t"][data-x="l"] .sw-menu{transform-origin:top left}
+.sw[data-y="b"][data-x="r"] .sw-menu{transform-origin:bottom right}.sw[data-y="b"][data-x="l"] .sw-menu{transform-origin:bottom left}
+.sw.open .sw-menu{transform:scale(1);opacity:1;visibility:visible;pointer-events:auto;transition:transform .22s cubic-bezier(.2,.9,.3,1.2),opacity .16s,visibility 0s}
+.sw-item{display:flex;align-items:center;gap:10px;width:100%;min-height:42px;padding:8px 11px;border:0;border-radius:11px;background:transparent;color:#c3cde0;font:600 13.5px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left;cursor:pointer;transition:background-color .15s,color .15s}
+.sw-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.sw-item:active{filter:brightness(1.25)}
+.sw-item .e{font-size:17px;width:22px;text-align:center}
+.sw-item.on{background:linear-gradient(135deg,#00F0D5,#7B6EF6);color:#021210;box-shadow:0 4px 16px rgba(0,240,213,.22)}
+.sw-sep{height:1px;margin:4px 8px;background:rgba(255,255,255,.08)}
+.sw-back{position:fixed;inset:0;z-index:45;display:none;background:rgba(3,6,13,.3)}
+.sw-back.show{display:block}
+
+/* ===== Original launcher style block 02 ===== */
+img{-webkit-filter:brightness(70%);}

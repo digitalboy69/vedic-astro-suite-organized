@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#010308">
+<title>Ephemeris — Live Sky & Transit Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+<div class="loading-mask" id="loadingMask">
+  <div class="loading-ring"></div>
+  <div class="loading-label">CALIBRATING EPHEMERIS…</div>
+</div>
+
+<div class="pdmodal-overlay" id="pickOverlay">
+  <div class="pdmodal">
+    <button class="pdmodal-close" id="pickClose" aria-label="Close">✕</button>
+    <div id="pickContent"></div>
+  </div>
+</div>
+<div class="pdmodal-overlay" id="risingOverlay">
+  <div class="pdmodal rs-pop" id="risingModal" role="dialog" aria-modal="true" aria-label="Rising sign timings">
+    <button class="pdmodal-close" id="risingClose" aria-label="Close">✕</button>
+    <div id="risingBody"></div>
+  </div>
+</div>
+<div class="pdmodal-overlay" id="aspExpOverlay">
+  <div class="pdmodal asp-pop" id="aspExpModal" role="dialog" aria-modal="true" aria-label="Aspect Explorer">
+    <button class="pdmodal-close" id="aspExpClose" aria-label="Close">✕</button>
+    <div class="asp-pop-body" id="aspExpBody"></div>
+  </div>
+</div>
+
+<div class="pdmodal-overlay" id="planetDetailOverlay">
+  <div class="pdmodal" id="planetDetailModal" role="dialog" aria-modal="true">
+    <button class="pdmodal-close" id="planetDetailClose" aria-label="Close">✕</button>
+    <div id="planetDetailContent"></div>
+  </div>
+</div>
+
+<div class="pdmodal-overlay" id="signDetailOverlay">
+  <div class="pdmodal" id="signDetailModal" role="dialog" aria-modal="true">
+    <button class="pdmodal-close" id="signDetailClose" aria-label="Close">✕</button>
+    <div id="signDetailContent"></div>
+  </div>
+</div>
+
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">Ω</div>
+      <h1>EPHEMERIS</h1>
+      <span class="tag">Live Sky Console</span>
+    </div>
+    <div class="topbar-controls">
+      <div class="profile-bar">
+        <select id="profileSelect"><option value="">No natal chart</option></select>
+        <button class="icon-btn" id="newProfileMiniBtn" title="New profile">+</button>
+        <button class="icon-btn" id="helpBtn" title="How to read this" aria-label="Help">?</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="viewport">
+    <canvas id="canvas3d"></canvas>
+    <div class="viewport-hud">
+      <div class="hud-datetime"><span id="hudDate">—</span> <span class="time" id="hudTime">—</span></div>
+      <div class="hud-sub" id="hudSub">JD — · Ayanamsa —°</div>
+      <div class="hud-asc" id="hudAsc" role="button" tabindex="0" title="Tap: set where you are · Hold: rising sign timings">↑ Rising — · —</div>
+      <div class="hud-moon" id="hudMoon">☽ — · —</div>
+    </div>
+    <div class="view-switch-wrap">
+      <div class="view-switch" id="viewSwitch"><button data-v="wheel" class="active">☸ Zodiac Wheel</button><button data-v="solar">☉ Solar System</button></div>
+      <div class="sol-sub" id="solScale" style="display:none"><button data-s="easy" class="active">Easy fit</button><button data-s="real">True scale</button></div>
+      <div class="sol-sub" id="solPresets" style="display:none"><button data-p="inner">Inner</button><button data-p="outer">Outer</button><button data-p="all">Whole system</button></div>
+    </div>
+    <div class="viewport-legend" id="viewportLegend"></div>
+    <div class="viewport-actions">
+      <button class="vp-btn" id="aspExpBtn" title="Aspect Explorer" aria-label="Aspect Explorer">☍</button>
+      <button class="vp-btn" id="planetPickBtn" title="Select a planet" aria-label="Select a planet">🪐</button>
+      <button class="vp-btn" id="resetViewBtn" title="Reset view">⟲</button>
+    </div>
+    <div id="planetLabels"></div>
+    <div class="freefly-stick move" id="ffMoveStick">
+      <div class="stick-base" id="ffStickBase"><div class="stick-nub" id="ffStickNub"></div></div>
+    </div>
+    <div class="freefly-vert" id="ffVertControls">
+      <button class="ff-vbtn" id="ffUpBtn" title="Move up">▲</button>
+      <button class="ff-vbtn" id="ffDownBtn" title="Move down">▼</button>
+    </div>
+  </div>
+
+  <div class="sidepanel" id="sidepanel">
+    <div class="sheet-handle" id="sheetHandle"></div>
+    <div class="panel-tabs">
+      <button class="panel-tab active" data-tab="sky"><span class="ti">☉</span><span>Sky</span></button>
+      <button class="panel-tab" data-tab="rising"><span class="ti">↑</span><span>Rising</span></button>
+      <button class="panel-tab" data-tab="transits"><span class="ti">➳</span><span>Transits</span></button>
+      <button class="panel-tab" data-tab="conjunctions"><span class="ti">☌</span><span>Meetings</span></button>
+      <button class="panel-tab" data-tab="degree"><span class="ti">⌖</span><span>Degree</span></button>
+      <button class="panel-tab" data-tab="natal"><span class="ti">✦</span><span>Natal</span></button>
+      <button class="panel-tab" data-tab="returns"><span class="ti">↺</span><span>Returns</span></button>
+      <button class="panel-tab" data-tab="retro"><span class="ti">℞</span><span>Retro</span></button>
+      <button class="panel-tab" data-tab="solar"><span class="ti">🪐</span><span>Solar</span></button>
+      <button class="panel-tab" data-tab="chart"><span class="ti">◎</span><span>Chart</span></button>
+      <button class="panel-tab" data-tab="view"><span class="ti">◐</span><span>View</span></button>
+      <button class="panel-tab" data-tab="export"><span class="ti">⇪</span><span>Export</span></button>
+    </div>
+    <div class="panel-content">
+
+      <div class="panel-section active" id="tab-sky">
+        <div class="tab-intro"><span class="ico">☉</span><div><b>Where every planet is right now.</b> Each row shows the planet, its zodiac sign and exact degree. <b>℞</b> means it appears to move backward. Tap a row for full details.</div></div>
+        <div class="panel-heading">Sidereal Positions</div>
+        <div id="skyTable"></div>
+      </div>
+
+      <div class="panel-section" id="tab-transits">
+        <div class="tab-intro"><span class="ico">➳</span><div><b>When planets change signs.</b> Slow planets matter most. Use the chips to pick which planets to follow, and tap a card to jump to that date.</div></div>
+        <div class="panel-heading">Upcoming Sign Ingresses</div>
+        <div class="scan-range-note" id="transitScanNote">Scanning from current date…</div>
+        <div class="filter-row" id="transitFilters"></div>
+        <div id="transitFeed"></div>
+      </div>
+
+      <div class="panel-section" id="tab-conjunctions">
+        <div class="tab-intro"><span class="ico">☌</span><div><b>When two planets meet in the same sign.</b> Tap a card to travel to that moment on the wheel.</div></div>
+        <div class="panel-heading">Upcoming Conjunctions</div>
+        <div class="scan-range-note" id="conjScanNote">Scanning from current date…</div>
+        <div class="filter-row" id="conjSignificanceFilter">
+          <button class="filter-chip active" data-sig="major">Major (slow pairs)</button>
+          <button class="filter-chip" data-sig="all">Include Moon transits</button>
+        </div>
+        <div id="conjunctionFeed"></div>
+      </div>
+
+      <div class="panel-section" id="tab-natal">
+        <div class="tab-intro"><span class="ico">✦</span><div><b>Your birth chart.</b> Save a profile once (date, time, place) and the Chart tab will show your personal houses and aspects.</div></div>
+        <div class="panel-heading">Natal Profile</div>
+        <div id="natalCardWrap"></div>
+        <div class="panel-heading">Enter Birth Details</div>
+        <form id="natalForm">
+          <div class="mini-field">
+            <label for="natalName">Name</label>
+            <input type="text" id="natalName" placeholder="Profile name">
+          </div>
+          <div class="mini-field">
+            <label for="natalDob">Date of Birth</label>
+            <input type="date" id="natalDob">
+          </div>
+          <div class="mini-field">
+            <label for="natalTob">Time of Birth</label>
+            <input type="time" id="natalTob" step="60">
+          </div>
+          <div class="mini-field location-wrap-mini">
+            <label for="natalPlace">Place of Birth</label>
+            <input type="text" id="natalPlace" placeholder="Start typing a city…" autocomplete="off">
+            <div class="location-results-mini" id="natalLocationResults"></div>
+          </div>
+          <div class="mini-field">
+            <label for="natalTz">Timezone</label>
+            <select id="natalTz"></select>
+          </div>
+          <button type="submit" class="btn-block">Save &amp; Activate Profile</button>
+          <button type="button" class="btn-secondary-block" id="clearNatalBtn">Clear Active Profile</button>
+        </form>
+      </div>
+
+      <div class="panel-section" id="tab-degree">
+        <div class="tab-intro"><span class="ico">⌖</span><div><b>Find the exact moment.</b> Pick a planet and type any degree down to the arc-second, like <b>3°55'27"</b>. The app lists every date and time it stood on that exact point.</div></div>
+        <div class="panel-heading">Planet</div>
+        <div class="filter-row" id="dfPlanets"></div>
+        <div class="panel-heading">Degree</div>
+        <div class="mini-field">
+          <label for="dfDeg">Degree · minutes · seconds</label>
+          <input type="text" id="dfDeg" placeholder="3°55'27&quot;" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
+        </div>
+        <div class="df-preview" id="dfPreview"></div>
+        <div class="df-hint">You can type 3°55'27", 3 55 27, 3:55:27 or decimal 3.9241. A number of 30 or more is read as a full 0–360° zodiac longitude.</div>
+        <div class="df-row2">
+          <div class="mini-field">
+            <label for="dfSign">Zodiac sign</label>
+            <select id="dfSign"></select>
+          </div>
+          <div class="mini-field">
+            <label>Look</label>
+            <div class="filter-row" id="dfDir" style="margin-bottom:0;flex-wrap:nowrap">
+              <button type="button" class="filter-chip active" data-dir="-1">Past 10</button>
+              <button type="button" class="filter-chip" data-dir="1">Next 10</button>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-block" id="dfGo">Find dates</button>
+        <div class="panel-heading">Results</div>
+        <div class="scan-range-note" id="dfNote">Sidereal (Lahiri) zodiac · times in your device timezone</div>
+        <div id="dfResults"><div class="empty-feed">Choose a planet, enter a degree, then tap <b>Find dates</b>.</div></div>
+      </div>
+
+      <div class="panel-section" id="tab-returns">
+        <div class="tab-intro"><span class="ico">↺</span><div><b>When each planet comes home.</b> A return is the moment a planet reaches the exact degree it held at your birth. Tap any row to see that moment on the wheel.</div></div>
+        <div class="panel-heading">Planet Returns</div>
+        <div class="scan-range-note" id="retNote"></div>
+        <div id="retFeed"></div>
+      </div>
+
+      <div class="panel-section" id="tab-retro">
+        <div class="tab-intro"><span class="ico">℞</span><div><b>When planets turn retrograde.</b> See the exact moment each planet stations, how long it stays retrograde, and the degrees it covers. Pick any year from 1900 to 2100.</div></div>
+        <div class="rt-year"><button type="button" id="rtPrev" aria-label="Previous year">‹</button><input type="number" id="rtYear" min="1900" max="2100" inputmode="numeric"><button type="button" id="rtNext" aria-label="Next year">›</button></div>
+        <div class="filter-row" id="rtChips"><button type="button" class="filter-chip" data-y="-1">Last year</button><button type="button" class="filter-chip" data-y="0">This year</button><button type="button" class="filter-chip" data-y="1">Next year</button></div>
+        <div id="rtBody"></div>
+      </div>
+
+      <div class="panel-section" id="tab-solar">
+        <div class="tab-intro"><span class="ico">🪐</span><div><b>The real solar system for this date.</b> Every planet's true distance from the Sun and from Earth, its real size and its year. Use the <b>Solar System</b> switch above the 3D view, then tap a row to fly to that planet. <b>True scale</b> shows how empty space really is.</div></div>
+        <div class="panel-heading">Planet Sizes (true proportions)</div>
+        <div id="solSizes" style="margin:0 0 18px"></div>
+        <div class="panel-heading">Distances &amp; Facts</div>
+        <div id="solTable"></div>
+        <div class="transit-note" style="margin-top:12px">Positions come from JPL Keplerian orbital elements (accurate to about an arc-minute for 1800–2050, less outside that range). The Sun's own diameter is about 1,391,400 km.</div>
+      </div>
+
+      <div class="panel-section" id="tab-chart">
+        <div class="tab-intro"><span class="ico">◎</span><div><b>Your chart, step by step.</b> Open each numbered section: wheel, houses, aspects, then the explorer.</div></div>
+        <div class="panel-heading">Rasi Chart (D1)</div>
+        <div class="sign-select-row">
+          <label for="signSelectDropdown">Inspect a Sign</label>
+          <select id="signSelectDropdown">
+            <option value="">Select a sign…</option>
+          </select>
+        </div>
+        <div id="chartWheelWrap"></div>
+        <div class="panel-heading">Houses &amp; Placements</div>
+        <div id="houseTable"></div>
+        <div class="panel-heading">Planetary Aspects (Graha Drishti)</div>
+        <div class="filter-row" id="aspectFocusFilter"></div>
+        <div id="aspectList"></div>
+
+        <div class="panel-heading">Sign Aspects (Rashi Drishti)</div>
+        <div class="scan-range-note" style="margin-bottom:12px;">Every sign each planet is currently casting its gaze on — regardless of whether another planet actually sits there.</div>
+        <div id="signAspectList"></div>
+        <button type="button" class="btn-secondary-block" id="copySignAspectsBtn" style="margin-bottom: 24px;">Copy Sign Aspects</button>
+
+        <div id="explorerHome"><div id="explorerBlock">
+        <div class="panel-heading">Aspect Explorer</div>
+        <div class="sign-select-row">
+          <label for="explorerModeToggle">Explore by</label>
+          <div class="cam-mode-row" id="explorerModeToggle" style="margin-bottom:12px;">
+            <button class="cam-mode-btn active" data-mode="planet">Planet</button>
+            <button class="cam-mode-btn" data-mode="sign">Sign</button>
+          </div>
+          <label for="explorerTargetSelect" id="explorerTargetLabel">Select a planet</label>
+          <select id="explorerTargetSelect"></select>
+        </div>
+        <div id="explorerResult"></div>
+        </div></div>
+      </div>
+
+      <div class="panel-section" id="tab-rising">
+        <div class="tab-intro"><span class="ico">↑</span><div><b>Your rising sign (Lagna) through the day.</b> Shows when the current rising sign started and ends, how much of it is done, and the timings of all 12 signs for your place.</div></div>
+        <div id="risingTabBody"></div>
+      </div>
+
+      <div class="panel-section" id="tab-view">
+        <div class="tab-intro"><span class="ico">◐</span><div><b>Control how the wheel looks.</b> Pick a camera style and switch guide lines on or off.</div></div>
+        <div class="panel-heading">Camera Mode</div>
+        <div class="cam-mode-row" id="camModeRow">
+          <button class="cam-mode-btn active" data-cammode="orbit">Orbit</button>
+          <button class="cam-mode-btn" data-cammode="focus">Focus Planet</button>
+          <button class="cam-mode-btn" data-cammode="free">Free Fly</button>
+        </div>
+        <div class="mini-field" id="focusPlanetFieldWrap" style="display:none;">
+          <label for="focusPlanetSelect">Focused Planet</label>
+          <select id="focusPlanetSelect"></select>
+          <div class="view-hint">Camera follows this planet. Drag still orbits around it; scroll/pinch zooms in.</div>
+        </div>
+        <div class="view-hint" id="freeFlyHint" style="display:none;">
+          Free Fly: drag to look around, use the on-screen stick (mobile) or WASD/arrow keys + Q/E (desktop) to move anywhere in the scene.
+        </div>
+
+        <div class="panel-heading">Line Visibility</div>
+        <div id="lineToggleList"></div>
+        <div class="panel-heading">3D Layers</div>
+        <div class="cam-mode-row" id="presetRow"><button class="pbtn" data-preset="top">Top</button><button class="pbtn" data-preset="tilt">Tilt</button><button class="pbtn" data-preset="side">Side</button></div>
+        <button type="button" class="btn-secondary-block" id="lagnaViewBtn" style="margin:0 0 14px">Rotate wheel to Lagna</button>
+        <div class="line-toggle-row"><div><div class="lt-label">Natal ghosts + transit arcs</div><div class="lt-sub">Your birth planets stay as rings; arcs show transit aspects to them</div></div><label class="switch"><input type="checkbox" id="L_natal" checked><span class="slider"></span></label></div><div class="line-toggle-row"><div><div class="lt-label">Live Lagna pointer</div><div class="lt-sub">Rising sign line (ASC / DSC) for where you are now</div></div><label class="switch"><input type="checkbox" id="L_lagna" checked><span class="slider"></span></label></div><div class="line-toggle-row"><div><div class="lt-label">Rising sign lines</div><div class="lt-sub">Gold lines where the current rising sign starts and ends (tap the Rising chip at the top to set your place)</div></div><label class="switch"><input type="checkbox" id="L_rise" checked><span class="slider"></span></label></div><div class="line-toggle-row"><div><div class="lt-label">House numbers</div><div class="lt-sub">Houses 1 to 12 counted from the Lagna, Lagna sign highlighted</div></div><label class="switch"><input type="checkbox" id="L_houses" checked><span class="slider"></span></label></div><div class="line-toggle-row"><div><div class="lt-label">Planet condition marks</div><div class="lt-sub">▲ exalted · ▼ debilitated · ★ own sign · ☀ combust · ℞ retrograde</div></div><label class="switch"><input type="checkbox" id="L_cond" checked><span class="slider"></span></label></div><div class="line-toggle-row"><div><div class="lt-label">Sade Sati zone</div><div class="lt-sub">Highlights the 3 signs around your natal Moon</div></div><label class="switch"><input type="checkbox" id="L_sade" checked><span class="slider"></span></label></div><div class="line-toggle-row"><div><div class="lt-label">Rahu–Ketu axis</div><div class="lt-sub">Axis line; turns red in eclipse season</div></div><label class="switch"><input type="checkbox" id="L_axis" checked><span class="slider"></span></label></div>
+        <button type="button" class="btn-block" id="saveImgBtn">Save wheel as image</button>
+        
+      </div>
+
+      <div class="panel-section" id="tab-export">
+        <div class="tab-intro"><span class="ico">⇪</span><div><b>Copy the data as text</b> to paste into notes, a document or an AI chat.</div></div>
+        <div class="panel-heading">Export / Copy Data</div>
+        <div class="sign-select-row">
+          <label for="exportSelect">Select Data to Copy</label>
+          <select id="exportSelect">
+            <option value="sky">Current Sky Positions</option>
+            <option value="transits">Upcoming Transits (2-Year Scan)</option>
+            <option value="conjunctions">Upcoming Conjunctions</option>
+            <option value="aspects">Planetary Aspects (Graha Drishti)</option>
+            <option value="sign_aspects">Sign Aspects (Rashi Drishti)</option>
+            <option value="all">All of the Above</option>
+          </select>
+        </div>
+        <button type="button" class="btn-block" id="copyDataBtn">Copy to Clipboard</button>
+        <div id="exportStatus" style="text-align:center; margin-top:16px; font-size:13px; font-weight:600; color:var(--cyan); display:none;">Copied to clipboard! ✓</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="timeline" id="timelineDock">
+    <div class="timeline-controls">
+      <button class="tl-btn" id="tlStepBack" title="Step back 1 day">«</button>
+      <button class="tl-btn play" id="tlPlayPause" title="Play/Pause">▶</button>
+      <button class="tl-btn" id="tlStepFwd" title="Step forward 1 day">»</button>
+      <div class="tl-speed" id="tlSpeed">
+        <button class="speed-chip" data-speed="1">1d/s</button>
+        <button class="speed-chip active" data-speed="7">1w/s</button>
+        <button class="speed-chip" data-speed="30">1mo/s</button>
+        <button class="speed-chip" data-speed="365">1y/s</button>
+      </div>
+      <button class="tl-btn tl-jump-toggle" id="tlJumpToggle" title="Jump to date" aria-label="Jump to date" aria-expanded="false">📅</button>
+      <div class="tl-jump">
+        <input type="datetime-local" id="jumpDateInput">
+        <button id="jumpBtn">Jump</button>
+        <button id="nowBtn">Now</button>
+      </div>
+    </div>
+    <div class="tl-track-wrap">
+      <div class="tl-track" id="tlTrack">
+        <div class="tl-fill" id="tlFill"></div>
+        <div class="tl-playhead" id="tlPlayhead"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="helpModal">
+  <div class="modal-box help-box">
+    <h4>How to read the wheel</h4>
+    <div class="help-list">
+      <div><i style="background:#F4C45C"></i><span><b>Outer ring</b> The 12 zodiac signs (Rashis).</span></div>
+      <div><i style="background:linear-gradient(90deg,#00F0D5,#FF6B4A)"></i><span><b>Colored arcs</b> The 27 Nakshatras, colored by their ruling planet.</span></div>
+      <div><i style="background:#9B8CFF"></i><span><b>Glowing dots</b> The 9 planets, moving in real time.</span></div>
+      <div><i style="background:#FF6B4A"></i><span><b>Lines</b> Aspects: which planets look at each other.</span></div>
+      <div><i style="background:#00F0D5"></i><span><b>Bottom bar</b> Play, step or jump through time. Tap anything to see details.</span></div>
+    </div>
+    <div class="modal-actions"><button class="modal-btn-confirm" id="helpClose" style="background:linear-gradient(135deg,#00F0D5,#7B6EF6);color:#021210;box-shadow:none">Got it</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <h4 id="modalTitle">Delete profile?</h4>
+    <p id="modalBody">This removes the saved profile from this browser.</p>
+    <div class="modal-actions">
+      <button class="modal-btn-cancel" id="modalCancel">Cancel</button>
+      <button class="modal-btn-confirm" id="modalConfirm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="assets/js/01-astronomical-engine.js"></script>
+<script src="assets/js/02-degree-finder-returns.js"></script>
+<script src="assets/js/03-retrograde-planner.js"></script>
+<script src="assets/js/04-export-copy.js"></script>
+</body>
+</html>

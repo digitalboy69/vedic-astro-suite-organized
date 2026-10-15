@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050507">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Vedic birth chart calculator with divisional charts, Vimshottari Dasha, yogas, Shadbala and birth-time rectification.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2722%27 fill=%27%23050507%27/%3E%3Ctext x=%2750%27 y=%2770%27 font-size=%2770%27 text-anchor=%27middle%27 fill=%27%23D4AF37%27%3E%E0%A5%90%3C/text%3E%3C/svg%3E">
+<title>Birth Time Rectification — Vedic Astrology</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <div class="brand">
+      <button type="button" id="hdrBack" aria-label="Back to Home">←</button>
+      <div class="brand-glyph">ॐ</div>
+      <div class="brand-text">
+        <h1>Birth Time Rectification</h1>
+        <p>Dial-in Precision Chart Calculator · Lahiri Ayanamsa</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="qsearch-wrap">
+        <button class="btn btn-ghost btn-sm" id="quickSearchBtn" title="Search anything (Ctrl/Cmd+K)">
+          <span class="qsearch-dot"></span><span class="qs-ico">🔍</span><span class="btn-label"> Search</span>
+        </button>
+        <div class="qsearch-popover" id="quickSearchPopover">
+          <div class="qsearch-popover-title">Quick Search</div>
+          <div class="qsearch-popover-desc">When active, click any placement in the chart — a planet, sign, house, yoga, dasha, anything — to look it up instantly.</div>
+          <div class="qsearch-toggle-row">
+            <span>Activate on click</span>
+            <div class="qsearch-toggle" id="qsearchToggle"></div>
+          </div>
+          <span class="qsearch-engine-label">Search Engine</span>
+          <div class="qsearch-engine-options">
+            <button type="button" class="qsearch-engine-btn active" id="qsearchEngineGoogle" data-engine="google">
+              <span class="qe-icon">🔎</span> Google Search <span class="qe-check">✓</span>
+            </button>
+            <button type="button" class="qsearch-engine-btn" id="qsearchEngineAi" data-engine="google-ai">
+              <span class="qe-icon">✨</span> Google AI Search <span class="qe-check">✓</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-sm" id="openMenuBtn" style="border-radius: var(--radius-full); padding: 10px 24px; box-shadow: 0 4px 16px rgba(212,175,55,0.2);">
+        <span class="menu-ico" style="font-size: 16px; margin-right: 8px;">👤</span><span class="btn-label">Menu</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="qsearch-live-badge" id="qsearchLiveBadge">
+  <span id="qsearchLiveBadgeText">🔍 Quick Search active — click anything in the chart</span>
+  <button type="button" id="qsearchLiveBadgeOff">Turn off</button>
+</div>
+
+<nav class="app-tabbar" id="appTabbar">
+  <div class="app-tabbar-inner">
+    <button class="app-tab" data-group="home" data-panel="panel-home"><span class="tab-icon">🏠</span>Home</button>
+    <button class="app-tab" data-group="chart" data-panel="panel-overview"><span class="tab-icon">◈</span>My Chart</button>
+    <button class="app-tab" data-group="rectify" data-panel="panel-rectification"><span class="tab-icon">🎯</span>Rectify</button>
+    <button class="app-tab" data-group="match" data-panel="panel-match"><span class="tab-icon">💞</span>Match</button>
+    <button class="app-tab" data-group="export" data-panel="panel-export"><span class="tab-icon">📤</span>Export</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section class="in-wrap" id="intakeSection">
+    <div class="in-hero">
+      <div class="in-orb" aria-hidden="true">
+        <div class="in-ring"><span style="transform:rotate(0deg) translateY(-64px) rotate(-0deg)">♈</span><span style="transform:rotate(30deg) translateY(-64px) rotate(-30deg)">♉</span><span style="transform:rotate(60deg) translateY(-64px) rotate(-60deg)">♊</span><span style="transform:rotate(90deg) translateY(-64px) rotate(-90deg)">♋</span><span style="transform:rotate(120deg) translateY(-64px) rotate(-120deg)">♌</span><span style="transform:rotate(150deg) translateY(-64px) rotate(-150deg)">♍</span><span style="transform:rotate(180deg) translateY(-64px) rotate(-180deg)">♎</span><span style="transform:rotate(210deg) translateY(-64px) rotate(-210deg)">♏</span><span style="transform:rotate(240deg) translateY(-64px) rotate(-240deg)">♐</span><span style="transform:rotate(270deg) translateY(-64px) rotate(-270deg)">♑</span><span style="transform:rotate(300deg) translateY(-64px) rotate(-300deg)">♒</span><span style="transform:rotate(330deg) translateY(-64px) rotate(-330deg)">♓</span></div>
+        <div class="in-om">ॐ</div>
+      </div>
+      <div class="in-eyebrow">Jyotiṣa · Vedic Astrology</div>
+      <h2>See your birth chart in <em>3 easy steps</em></h2>
+      <p>No astrology knowledge needed. Just tell us when and where you were born. We do the rest and explain it in plain words.</p>
+      <div class="in-trust">🔒 Saved only on this device · Free · No sign-up</div>
+      <div class="in-get" style="margin-top:16px">
+        <div><span>◈</span>Your chart<small>Map of the sky at your birth</small></div>
+        <div><span>◷</span>Life timeline<small>Which phase you are in now</small></div>
+        <div><span>✦</span>Your strengths<small>Explained simply</small></div>
+        <div><span>🎯</span>Fix your time<small>Not sure? We help</small></div>
+      </div>
+    </div>
+
+    <div class="in-saved" id="inSaved" hidden></div>
+
+    <form class="in-card" id="birthForm" autocomplete="off">
+      <div class="in-progress"><div class="in-progress-top"><b id="inStepLbl">Step 1 of 3</b><span id="inStepHint">Let's start with your name</span></div><div class="in-bar"><i id="inBarFill"></i></div></div>
+
+      <div class="in-step" data-step="1">
+        <div class="in-step-h"><span class="in-num">1</span><div><b>👤 What should we call you?</b><small>Just so we can label your chart</small></div></div>
+        <div class="form-grid"><div class="field full">
+          <label for="profileName">Your name</label>
+          <input type="text" id="profileName" placeholder="e.g. Ananya Sharma" required>
+        </div></div>
+      </div>
+
+      <div class="in-step" data-step="2">
+        <div class="in-step-h"><span class="in-num">2</span><div><b>🎂 When were you born?</b><small>Pick the date and time from the lists</small></div></div>
+        <div class="form-grid">
+          <div class="field">
+            <label for="dobInput">Date of birth</label>
+            <input type="date" id="dobInput" required>
+          </div>
+          <div class="field">
+            <label for="tobInput">Time of birth</label>
+            <input type="time" id="tobInput" step="1" required>
+          </div>
+        </div>
+        <div class="in-tip">💡 <span>Not sure of the exact time? Enter your best guess, then fine-tune it later with <b>Rectify</b>. Seconds are optional.</span></div>
+      </div>
+
+      <div class="in-step" data-step="3">
+        <div class="in-step-h"><span class="in-num">3</span><div><b>📍 Where were you born?</b><small>Type your city, we fill in the rest</small></div></div>
+        <div class="form-grid">
+          <div class="field full location-wrap">
+            <label for="placeInput">Place of birth</label>
+            <input type="text" id="placeInput" placeholder="Start typing a city name…" required>
+            <div class="location-results" id="locationResults"></div>
+            <div class="location-status" id="locationStatus"></div>
+          </div>
+          <div class="field">
+            <label for="tzInput">Timezone (UTC)</label>
+            <select id="tzInput" required></select>
+            <span class="field-hint" id="tzHint">Auto-filled from place; adjust if needed</span>
+          </div>
+          <div class="field">
+            <label>Coordinates</label>
+            <div class="coord-readout" id="coordReadout">— not yet selected —</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="error-banner" id="errorBanner"></div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn-cast" id="castBtn">✨ Show my chart</button>
+        <div class="in-micro">Takes a few seconds · You can change anything later</div>
+      </div>
+    </form>
+  </section>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Computing planetary positions…</div>
+  </div>
+
+  <section id="results">
+    <!-- populated by JS -->
+  </section>
+
+</main>
+
+<footer class="site-footer">
+<div class="dev-credit">
+    Developed by <span class="dev-name">MADHU YADAV</span> <span class="beating-heart">❤️</span>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-box">
+    <h4 id="modalTitle">Delete this profile?</h4>
+    <p id="modalBody">This will permanently remove the saved profile from this browser.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="modalConfirm" style="background:linear-gradient(135deg,var(--red-bright),var(--red)); color:#fff; box-shadow: 0 4px 16px rgba(166,68,68,0.3);">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="pd-modal-overlay" id="planetDetailModal">
+  <div class="pd-modal-box" id="pdBox">
+    <button type="button" class="pd-modal-close" id="pdModalClose">✕</button>
+    <div class="pd-modal-head">
+      <div class="pd-modal-glyph" id="pdGlyph"></div>
+      <div>
+        <div class="pd-modal-title" id="pdTitle"></div>
+        <div class="pd-modal-subtitle" id="pdSubtitle"></div>
+      </div>
+    </div>
+    <div class="pd-pills" id="pdPills"></div>
+    <div class="pd-stat-grid" id="pdStatGrid"></div>
+    <div class="pd-modal-note" id="pdNote"></div>
+    <div class="pd-foot"><button type="button" data-pd-go="-1">‹ Prev</button><button type="button" id="pdStrengthBtn">⚖ Strength</button><button type="button" data-pd-go="1">Next ›</button></div>
+  </div>
+</div>
+
+<div class="export-modal-overlay" id="exportModal">
+  <div class="export-modal-box">
+    <div class="export-modal-header">
+      <button type="button" class="export-modal-close" id="exportModalClose">✕</button>
+      <div class="export-modal-title">Export &amp; Share</div>
+      <div class="export-modal-subtitle">Pick what to include (everything is selected by default), then download it as a file or copy the text.</div>
+    </div>
+    <div class="export-modal-body">
+
+      <div class="export-select-all-row">
+        <label class="export-select-all-label">
+          <input type="checkbox" id="exportSelectAll" checked>
+          Select All Sections
+        </label>
+        <span class="export-count-label" id="exportCountLabel"></span>
+      </div>
+
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="birthDetails" checked>
+        <div><div class="export-check-label">Birth Details</div><div class="export-check-desc">Name, date, time, place, coordinates, ayanamsa</div></div>
+      </label>
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="chartSummary" checked>
+        <div><div class="export-check-label">Chart Summary</div><div class="export-check-desc">Ascendant, Moon sign, Sun sign, nakshatra</div></div>
+      </label>
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="karakas" checked>
+        <div><div class="export-check-label">Chara Karakas</div><div class="export-check-desc">Atmakaraka through Darakaraka (Jaimini)</div></div>
+      </label>
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="planetTable" checked>
+        <div><div class="export-check-label">Planetary Positions (D1)</div><div class="export-check-desc">Sign, degree, house, nakshatra, dignity, speed, combustion</div></div>
+      </label>
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="aspects" checked>
+        <div><div class="export-check-label">Planetary Aspects</div><div class="export-check-desc">Drishti — which houses/signs each planet aspects</div></div>
+      </label>
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="yogas" checked>
+        <div><div class="export-check-label">Yogas</div><div class="export-check-desc">Notable planetary combinations detected</div></div>
+      </label>
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="shadbala" checked>
+        <div><div class="export-check-label">Shadbala</div><div class="export-check-desc">Six-fold planetary strength, all components</div></div>
+      </label>
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="ashtakavarga" checked>
+        <div><div class="export-check-label">Ashtakavarga</div><div class="export-check-desc">All 7 planet tables + combined Sarvashtakavarga</div></div>
+      </label>
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="dasha" checked>
+        <div><div class="export-check-label">Vimshottari Dasha</div><div class="export-check-desc">Full timeline — every Mahadasha and Antardasha</div></div>
+      </label>
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="vargas" checked id="exportVargasCheck">
+        <div><div class="export-check-label">Divisional Charts (D1–D60)</div><div class="export-check-desc">All 20 varga charts, house-by-house with dignity</div></div>
+      </label>
+      <div class="export-vargas-group" id="exportVargasGroup">
+        <div class="export-check-desc">Include specific charts only (all selected by default):</div>
+        <div class="export-vargas-chips" id="exportVargasChips"></div>
+      </div>
+      <label class="export-check-item">
+        <input type="checkbox" class="export-section-check" data-section="rawLongitudes" checked>
+        <div><div class="export-check-label">Raw Sidereal Longitudes</div><div class="export-check-desc">Reference table for cross-checking against other software</div></div>
+      </label>
+
+      <div class="export-location-section">
+        <label class="export-check-item" style="padding-top:0;">
+          <input type="checkbox" class="export-section-check" data-section="liveSky" id="exportLiveSkyCheck">
+          <div><div class="export-check-label">Live Sky Right Now (Gochara)</div><div class="export-check-desc">Current planetary positions, nakshatras &amp; degrees, compared to this natal chart</div></div>
+        </label>
+        <div id="exportLocationPicker" style="display:none; margin-left:36px; margin-top:12px;">
+          <div class="export-location-toggle">
+            <button type="button" class="export-loc-mode-btn active" data-loc-mode="search">Search by Place Name</button>
+            <button type="button" class="export-loc-mode-btn" data-loc-mode="coords">Enter Coordinates</button>
+          </div>
+
+          <div id="exportLocSearchMode">
+            <div class="export-mini-field location-wrap">
+              <label for="exportPlaceInput">Current Location</label>
+              <input type="text" id="exportPlaceInput" placeholder="Start typing a city…" autocomplete="off">
+              <div class="location-results" id="exportLocationResults"></div>
+            </div>
+          </div>
+
+          <div id="exportLocCoordsMode" style="display:none;">
+            <div class="export-coord-grid">
+              <div class="export-mini-field">
+                <label for="exportLatInput">Latitude</label>
+                <input type="number" id="exportLatInput" placeholder="e.g. 28.6139" step="0.0001" min="-90" max="90">
+              </div>
+              <div class="export-mini-field">
+                <label for="exportLonInput">Longitude</label>
+                <input type="number" id="exportLonInput" placeholder="e.g. 77.2090" step="0.0001" min="-180" max="180">
+              </div>
+            </div>
+          </div>
+
+          <div class="export-mini-field" style="margin-top:16px;">
+            <label for="exportTzInput">Timezone (UTC)</label>
+            <select id="exportTzInput"></select>
+          </div>
+          <div class="export-location-status" id="exportLocationStatus"></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="export-dev">
+      <div class="ed-left"><span class="ed-av">MY</span><span class="ed-text">Questions, bugs or ideas?<b>Contact the developer, Madhu Yadav</b></span></div>
+      <div class="ed-links"><a class="ed-ig" href="https://instagram.com/mr.madhu_69" target="_blank" rel="noopener">📸 Instagram</a><a class="ed-wa" href="https://wa.me/918919748693" target="_blank" rel="noopener">💬 WhatsApp</a></div>
+    </div>
+    <div class="export-modal-footer">
+      <span class="export-count-label" id="exportModalHint">All sections included</span>
+      <div class="export-actions">
+        <button type="button" class="export-download-btn export-ghost" id="exportCopyBtn">📋 Copy data</button>
+        <button type="button" class="export-download-btn" id="exportDownloadBtn">⬇ Download file</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="mainMenuModal">
+  <div class="menu-modal-box">
+    <button type="button" class="pd-modal-close" id="mainMenuClose">✕</button>
+    <h3 class="menu-modal-title">Menu & Settings</h3>
+    
+    <div class="menu-section">
+      <label>Your profiles <span id="profCount" class="prof-count"></span></label>
+      <div id="profileCards" class="prof-cards"></div>
+      <select id="profileSelect" class="profile-select" hidden><option value="">— Select a profile —</option></select>
+      <button class="btn btn-ghost" id="deleteProfileBtn" hidden>🗑️</button>
+    </div>
+
+    <div class="menu-actions">
+      <button class="menu-action-btn" id="newProfileBtn">
+        <span class="action-icon">➕</span> Create New Profile
+      </button>
+      <button class="menu-action-btn" id="exportReportBtn">
+        <span class="action-icon">📄</span> Export Chart Report
+      </button>
+      <button class="menu-action-btn" id="exportProfilesBtn">
+        <span class="action-icon">📤</span> Export All Profiles
+      </button>
+      <button class="menu-action-btn" id="importProfilesBtn">
+        <span class="action-icon">📥</span> Import Profiles
+      </button>
+      <button class="menu-action-btn dev-btn" id="contactDevBtn">
+        <span class="action-icon">💬</span> Contact Developer & Bugs
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="profileDataModal">
+  <div class="menu-modal-box profile-data-modal-box">
+    <button type="button" class="pd-modal-close" id="profileDataModalClose">✕</button>
+    <h3 class="menu-modal-title" id="profileDataModalTitle">Export Profiles</h3>
+    <p class="profile-data-hint" id="profileDataModalHint">
+      This is a backup of every saved profile on this device. Copy it somewhere safe (a note, an email to yourself) — on another device or browser, open this same menu, choose "Import Profiles", paste it in, and they'll all come back.
+    </p>
+    <textarea id="profileDataTextarea" class="profile-data-textarea" placeholder="Paste exported profile JSON here to import..." spellcheck="false"></textarea>
+    <div class="profile-data-actions">
+      <button type="button" class="chart-dl-btn-single" id="profileDataPrimaryBtn"><span>📋</span> Copy to Clipboard</button>
+      <button type="button" class="chart-dl-btn-single chart-dl-btn-secondary" id="profileDataSecondaryBtn" style="display:none;"><span>📥</span> Import These Profiles</button>
+    </div>
+    <div class="profile-data-status" id="profileDataStatus"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="contactModal">
+  <div class="contact-modal-box dev-card">
+    <button type="button" class="pd-modal-close" id="contactModalClose">✕</button>
+    <div class="dc-orbs"><i></i><i></i><i></i></div>
+    <div class="dc-hero">
+      <div class="dc-avatar dc-in" style="--i:0"><span class="dc-ring"></span><span class="dc-initials">MY</span><em class="dc-badge">✓</em></div>
+      <div class="dc-name dc-in" style="--i:1">Madhu Yadav</div>
+      <div class="dc-role dc-in" style="--i:2">Creator · Developer · Jyotish Enthusiast</div>
+      <p class="dc-bio dc-in" style="--i:3">I built this app with love for Vedic astrology. Found a bug or have a big idea? I read every message.</p>
+    </div>
+    <div class="dc-label dc-in" style="--i:4">What can I help with?</div>
+    <div class="dc-topics dc-in" style="--i:5">
+      <a href="https://wa.me/918919748693?text=Hi%20Madhu%2C%20I%20found%20a%20bug%20in%20the%20Birth%20Time%20Rectification%20app%3A%20" target="_blank" rel="noopener"><span>🐞</span>Report a bug</a>
+      <a href="https://wa.me/918919748693?text=Hi%20Madhu%2C%20I%20have%20a%20feature%20idea%20for%20the%20app%3A%20" target="_blank" rel="noopener"><span>💡</span>Suggest a feature</a>
+      <a href="https://wa.me/918919748693?text=Hi%20Madhu%2C%20I%20would%20like%20to%20talk%20about%20astrology%3A%20" target="_blank" rel="noopener"><span>🔮</span>Astrology chat</a>
+    </div>
+    <div class="dc-label dc-in" style="--i:6">Connect</div>
+    <div class="dc-links">
+      <a href="https://instagram.com/mr.madhu_69" target="_blank" rel="noopener" class="dc-link insta dc-in" style="--i:7">
+        <span class="dc-ico">📸</span><span class="dc-txt"><b>Instagram</b><small>@mr.madhu_69</small></span><span class="dc-go">↗</span>
+      </a>
+      <a href="https://wa.me/918919748693" target="_blank" rel="noopener" class="dc-link wa dc-in" style="--i:8">
+        <span class="dc-ico">💬</span><span class="dc-txt"><b>WhatsApp</b><small>+91 89197 48693</small></span><span class="dc-go">↗</span>
+      </a>
+    </div>
+    <button type="button" class="dc-copy dc-in" style="--i:9" onclick="copyDevNumber(this)">📋 Copy WhatsApp number</button>
+    <div class="dc-foot dc-in" style="--i:10">Made with ♥ for Vedic astrology</div>
+  </div>
+</div>
+<script src="assets/js/01-contact-helper.js"></script>
+
+
+<script src="assets/js/02-app-core.js"></script>
+<script src="assets/js/03-varga-interface.js"></script>
+<script src="assets/js/04-chart-reading.js"></script>
+<script src="assets/js/05-life-activation.js"></script>
+<script src="assets/js/06-bhava-bala.js"></script>
+<script src="assets/js/07-tithi-pravesh.js"></script>
+<script src="assets/js/08-sahams.js"></script>
+<script src="assets/js/09-fate-meter.js"></script>
+<script src="assets/js/10-export-copy.js"></script>
+<script src="assets/js/11-qrcode-library.js"></script>
+<script src="assets/js/12-chart-sharing.js"></script>
+<script src="assets/js/13-cloud-account.js"></script>
+</body>
+</html>

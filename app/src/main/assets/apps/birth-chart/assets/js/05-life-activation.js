@@ -1,0 +1,48 @@
+/* ===== Life Activation: which houses are lit up on any date ===== */
+(function(){
+const PL=['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu'],BEN=['Jupiter','Venus','Mercury','Moon'];
+const IC=['🧍','💰','🦁','🏡','👶','🩺','💍','🔮','🙏','💼','🤝','🌙'],TH=['self & health','money & family','courage & effort','home & peace','children & creativity','work, service & health issues','marriage & partnership','change & the hidden','luck & guidance','career & status','gains & friends','loss, foreign lands & rest'];
+const ord=n=>n+(['th','st','nd','rd'][(n%100>10&&n%100<14)?0:Math.min(n%10,4)%4]||'th');
+const TR={Saturn:[3,2,[3,7,10]],Jupiter:[3,2,[5,7,9]],Rahu:[2,1,[5,7,9]],Ketu:[2,1,[5,7,9]],Mars:[1.5,1,[4,7,8]],Sun:[1,0,[]]};
+const VERB={Saturn:'tests and matures this area',Jupiter:'expands and blesses this area',Rahu:'stirs ambition and change here',Ketu:'detaches you from this area',Mars:'adds energy and friction here',Sun:'puts a spotlight here this month'};
+const ADV={growth:'🌱 Opportunities flow here — apply, say yes, take initiative.',pressure:'⚡ Pressure and lessons here — stay disciplined, avoid rash moves, patience pays.',mixed:'⚖️ Mixed signals — progress comes with friction, so plan carefully.'};
+function calc(c,date){const hs=c.vargas.D1.houses,P=c.planets,asc=c.ascendant.sign,pts=Array(13).fill(0),why=Array.from({length:13},()=>[]),tb=Array(13).fill(0),tm=Array(13).fill(0),tj=Array(13).fill(0),ts=Array(13).fill(0);
+  const add=(h,w,t,src)=>{pts[h]+=w;why[h].push({t,src,w});(BEN.includes(src)?tb:tm)[h]+=w;},rules=n=>hs.filter(x=>x.signLord===n).map(x=>x.houseNum);
+  const act=findActiveDasha(c.dashaData.mahadashas,date);
+  if(act&&act.mahadasha)[[act.mahadasha,3,'Mahadasha'],[act.antardasha,2,'Antardasha'],[act.pratyantardasha,1,'Pratyantar']].forEach(([d,w,lab])=>{if(!d)return;const n=d.lord;rules(n).forEach(h=>add(h,w,`${n} (${lab}) rules this house`,n));add(P[n].house,w,`${n} (${lab}) sits in this house`,n);if(w>1)(P[n].aspectsHouses||[]).forEach(h=>add(h,1,`${n} (${lab}) aspects this house`,n));});
+  const jd=toJulianDay(date.getUTCFullYear(),date.getUTCMonth()+1,date.getUTCDate(),date.getUTCHours(),date.getUTCMinutes(),0),ay=lahiriAyanamsa(jd),tp={};
+  Object.keys(TR).forEach(n=>{const lon=n==='Sun'?sunLongitude(jd):n==='Rahu'?rahuLongitude(jd):n==='Ketu'?rahuLongitude(jd)+180:planetGeocentricLongitude(n.toLowerCase(),jd),s=Math.floor(normDeg(lon-ay)/30),h=(s-asc+12)%12+1,[ow,aw,offs]=TR[n];tp[n]={s,h};
+    add(h,ow,`${n} is transiting here — it ${VERB[n]}`,n);if(n==='Jupiter')tj[h]=1;if(n==='Saturn')ts[h]=1;
+    if(aw)offs.forEach(o=>{const t=(h+o-2)%12+1;add(t,aw,`${n} aspects this house from house ${h}`,n);if(n==='Jupiter')tj[t]=1;if(n==='Saturn')ts[t]=1;});});
+  for(let h=1;h<=12;h++)if(tj[h]&&ts[h]){pts[h]+=3;tb[h]+=1.5;tm[h]+=1.5;why[h].push({t:'Double transit: Jupiter AND Saturn both activate this house — a classic trigger for real events',src:'Jupiter',w:3,dbl:1});}
+  const tone=h=>tb[h]>tm[h]*1.3?'growth':tm[h]>tb[h]*1.3?'pressure':'mixed';
+  return {pts,why,tone,act,tp,max:Math.max(1,...pts.slice(1)),dbl:tj.map((v,h)=>h&&v&&ts[h])};}
+function heat(t){const S=[[0,[26,33,64]],[.3,[44,140,150]],[.6,[232,193,79]],[1,[255,107,74]]];for(let i=1;i<4;i++)if(t<=S[i][0]){const a=S[i-1],b=S[i],k=(t-a[0])/(b[0]-a[0]);return `rgb(${a[1].map((v,j)=>Math.round(v+(b[1][j]-v)*k))})`;}return 'rgb(255,107,74)';}
+const lab=t=>t>=.75?['Very active','b']:t>=.5?['Active','g']:t>=.28?['Warming','t']:['Quiet',''];
+function wheel(r,sel,rank){const cx=150,cy=150,R0=140,R1=76,pt=(q,a)=>[+(cx+q*Math.cos(a*Math.PI/180)).toFixed(1),+(cy+q*Math.sin(a*Math.PI/180)).toFixed(1)],mid=h=>180-30*(h-1)-15;
+  let s=`<svg class="ac-wheel" viewBox="0 0 300 300"><defs><radialGradient id="acb" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#1c2242"/><stop offset="1" stop-color="#06070c"/></radialGradient></defs><circle cx="150" cy="150" r="148" fill="url(#acb)" stroke="#D4AF37" stroke-opacity=".5"/>`;
+  for(let h=1;h<=12;h++){const a2=180-30*(h-1),a1=a2-30,t=r.pts[h]/r.max,p1=pt(R0,a1),p2=pt(R0,a2),p3=pt(R1,a2),p4=pt(R1,a1),ic=pt(112,mid(h)),nm=pt(91,mid(h)),hot=rank.slice(0,3).includes(h);
+    s+=`<path class="ac-seg${sel===h?' sel':''}" data-h="${h}" d="M${p1} A${R0} ${R0} 0 0 1 ${p2} L${p3} A${R1} ${R1} 0 0 0 ${p4}Z" fill="${heat(t)}" fill-opacity="${.35+.65*t}" stroke="${hot?'#F9D976':'#0b0d14'}" stroke-width="${hot?2:1.2}"/><text x="${ic[0]}" y="${ic[1]}" text-anchor="middle" dominant-baseline="central" font-size="${14+8*t}" pointer-events="none">${IC[h-1]}</text><text x="${nm[0]}" y="${nm[1]}" text-anchor="middle" dominant-baseline="central" font-size="9" font-weight="700" fill="#fff" fill-opacity=".85" font-family="sans-serif" pointer-events="none">${h}</text>`;}
+  return s+`<circle cx="150" cy="150" r="70" fill="#0a0c14" stroke="#D4AF37" stroke-opacity=".4"/><text x="150" y="132" text-anchor="middle" font-size="8" letter-spacing="2" fill="#D4AF37" font-family="sans-serif" font-weight="700">LIFE NOW</text><text x="150" y="156" text-anchor="middle" font-size="26" fill="#fff" font-family="sans-serif">${IC[rank[0]-1]}</text><text x="150" y="176" text-anchor="middle" font-size="10" fill="#F4F1E8" font-family="sans-serif" font-weight="700">House ${rank[0]}</text></svg>`;}
+function render(root){const c=window.__acC,d=new Date(root.dataset.d+'T12:00:00'),r=calc(c,d),rank=Array.from({length:12},(_,i)=>i+1).sort((a,b)=>r.pts[b]-r.pts[a]),sel=+root.dataset.sel||rank[0],pr=window.__vgProf||{};
+  const fd=x=>x.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),age=pr.dob?(d-new Date(pr.dob+'T00:00'))/31556952000:null,top=rank.slice(0,3);
+  const card=(h,full)=>{const t=r.pts[h]/r.max,tn=r.tone(h),L=lab(t);return `<div class="ac-card ${tn}"><header><span class="ac-ic">${IC[h-1]}</span><div><b>House ${h} · ${TH[h-1]}</b><small>${ord(h)} house</small></div><span class="vx-chip ${L[1]}">${L[0]}</span></header><div class="vx-bar" style="grid-template-columns:1fr"><i><u style="width:${Math.round(t*100)}%;background:${heat(t)}"></u></i></div><div class="ac-tone">${ADV[tn]}</div>${full?r.why[h].sort((a,b)=>b.w-a.w).map(w=>`<div class="rd-w ${w.dbl?'g':BEN.includes(w.src)?'g':'b'}">${w.dbl?'🔥':'•'} ${w.t}</div>`).join(''):''}</div>`;};
+  const mdl=r.act&&r.act.mahadasha,adl=r.act&&r.act.antardasha,pdl=r.act&&r.act.pratyantardasha;
+  const forces=(mdl?[[mdl,'MD'],[adl,'AD'],[pdl,'PD']].filter(x=>x[0]).map(([x,l])=>`<span class="vx-chip g">⏳ ${x.lord} ${l}</span>`).join(''):'<span class="vx-chip">No dasha data for this date</span>')+Object.keys(TR).filter(n=>n!=='Sun').map(n=>`<span class="vx-chip t">${PLANET_GLYPHS[n]} ${n} → H${r.tp[n].h}</span>`).join('');
+  const dbl=r.dbl.map((v,h)=>v?h:0).filter(Boolean);
+  root.innerHTML=`<div class="ac-date"><button data-s="-365">«1y</button><button data-s="-30">‹1m</button><input type="date" value="${root.dataset.d}"><button data-s="30">1m›</button><button data-s="365">1y»</button><button data-t="1" class="ac-today">Today</button></div>
+   <div class="ac-sub">${fd(d)}${age!=null&&age>=0?' · age '+Math.floor(age)+' y '+Math.floor((age%1)*12)+' mo':age!=null?' · before birth':''}</div>
+   <div class="vx-note g"><div>🌌 <b>The big picture:</b> life is centred on <b>${top.map(h=>TH[h-1]).join('</b>, <b>')}</b>. ${ADV[r.tone(top[0])]}${dbl.length?'<br>🔥 Double transit active on house'+(dbl.length>1?'s ':' ')+dbl.join(', ')+' — events here are likely to materialise.':''}</div></div>
+   ${wheel(r,sel,rank)}<div class="ac-leg"><span>Quiet</span><i></i><span>Very active</span></div>
+   <div class="rd-h">Forces at work</div><div>${forces}</div>
+   <div class="rd-h">Top 3 active areas</div>${top.map(h=>card(h,true)).join('')}
+   <div class="rd-h">All 12 houses — tap one</div>${rank.map(h=>{const t=r.pts[h]/r.max;return `<button type="button" class="ac-row${sel===h?' sel':''}" data-h="${h}"><span>${IC[h-1]}</span><b>${h}</b><i><u style="width:${Math.round(t*100)}%;background:${heat(t)}"></u></i><small>${TH[h-1]}</small></button>`}).join('')}
+   ${top.includes(sel)?'':'<div class="rd-h">House '+sel+' in detail</div>'+card(sel,true)}`;}
+window.buildActivationPanel=function(c){window.__acC=c;const t=new Date(),iso=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+  return `<div class="section-heading"><h3>Life Activation — what's lit up in your life</h3><div class="rule"></div></div><div class="vx-note"><div>Shows which of your 12 life houses are switched on at a given moment, using your running Dasha periods plus where Saturn, Jupiter, Rahu, Ketu, Mars and the Sun are transiting. Pick any date to travel in time.</div></div><div class="ac" data-d="${iso}" data-today="${iso}" data-sel="0"></div>`;};
+let mo=new MutationObserver(()=>{document.querySelectorAll('.ac:empty').forEach(r=>{try{render(r);}catch(e){console.warn('activation',e);r.innerHTML='<div class="vx-note b"><div>Could not compute activation for this date.</div></div>';}});});mo.observe(document.body,{childList:true,subtree:true});
+document.addEventListener('click',e=>{const r=e.target.closest('.ac');if(!r)return;const b=e.target.closest('[data-s],[data-t]'),h=e.target.closest('[data-h]');
+  if(b){const d=new Date(r.dataset.d+'T12:00:00');if(b.dataset.t)r.dataset.d=r.dataset.today;else{d.setDate(d.getDate()+ +b.dataset.s);r.dataset.d=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}r.dataset.sel=0;render(r);}
+  else if(h){r.dataset.sel=h.dataset.h;render(r);}});
+document.addEventListener('change',e=>{const r=e.target.closest&&e.target.closest('.ac');if(r&&e.target.type==='date'&&e.target.value){r.dataset.d=e.target.value;r.dataset.sel=0;render(r);}});
+})();
